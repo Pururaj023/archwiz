@@ -1,0 +1,38 @@
+:root{
+  --bg:#F1EFE8; --ink:#1E1B2E; --muted:#5E5B70; --card:#FFFFFF; --line:#D9D5C8;
+  --accent:#E8452C;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#16141F; --ink:#F1EFE8; --muted:#A9A5BD; --card:#211E2E; --line:#37334A; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  line-height:1.55}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+header.site{border-bottom:2px solid var(--ink)}
+header.site .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+.logo{font-weight:800;font-size:1.25rem;text-decoration:none;letter-spacing:-.02em}
+nav ul{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+nav a{display:block;padding:6px 14px;border-radius:999px;text-decoration:none;font-weight:600;border:2px solid transparent}
+nav a:hover{border-color:var(--ink)}
+nav a[aria-current="page"]{background:var(--ink);color:var(--bg)}
+.hero{padding:64px 0 36px;border-bottom:8px solid var(--accent)}
+.hero h1{font-size:clamp(2.4rem,7vw,4.6rem);line-height:1.02;letter-spacing:-.035em;margin:0 0 16px;font-weight:800;max-width:14ch}
+.hero p{font-size:1.2rem;color:var(--muted);max-width:52ch;margin:0}
+main{padding:40px 0 64px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;list-style:none;margin:0;padding:0}
+.game{background:var(--card);border:2px solid var(--ink);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:8px;box-shadow:6px 6px 0 var(--accent)}
+.game h2{margin:0;font-size:1.35rem;letter-spacing:-.01em}
+.genre{align-self:flex-start;background:var(--accent);color:#fff;font-weight:700;font-size:.85rem;padding:2px 10px;border-radius:999px}
+.game p{margin:0;color:var(--muted)}
+.platforms{margin-top:auto !important;padding-top:10px;border-top:1px solid var(--line);font-size:.9rem}
+.game a.more{font-weight:700;text-decoration-thickness:2px;text-underline-offset:4px;text-decoration-color:var(--accent)}
+footer{border-top:2px solid var(--ink);padding:20px 0;color:var(--muted);font-size:.9rem}
+@media (prefers-reduced-motion:no-preference){
+  .hero h1{animation:rise .5s ease-out both}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+}

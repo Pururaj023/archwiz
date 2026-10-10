@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gamepicks-rpg
+  labels:
+    app: gamepicks-rpg
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gamepicks-rpg
+  template:
+    metadata:
+      labels:
+        app: gamepicks-rpg
+    spec:
+      containers:
+        - name: web
+          # The pipeline replaces IMAGE_PLACEHOLDER with docker.io/pururajchoudhary23/gamepicks-<page>:<commit sha>
+          image: IMAGE_PLACEHOLDER
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gamepicks-rpg
+spec:
+  selector:
+    app: gamepicks-rpg
+  ports:
+    - port: 80
+      targetPort: 8080
