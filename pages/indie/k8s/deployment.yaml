@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: web
-          # The pipeline replaces IMAGE_PLACEHOLDER with docker.io/pururajchoudhary23/gamepicks-<page>:<commit sha>
-          image: IMAGE_PLACEHOLDER
+          # The pipeline rewrites this tag to the new commit SHA; Argo CD then syncs it.
+          image: pururajchoudhary23/gamepicks-indie:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

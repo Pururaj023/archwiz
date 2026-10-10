@@ -1,6 +1,7 @@
 # Routes one hostname to the five page services.
-# For minikube: run `minikube addons enable ingress` first, then add
-# `<minikube ip>  gamepicks.local` to your hosts file.
+# For minikube: run `minikube addons enable ingress` first.
+# No host is set, so the site answers on the minikube IP (or 127.0.0.1 with
+# `minikube tunnel`). No hosts-file entry needed.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -11,8 +12,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: gamepicks.local
-      http:
+    - http:
         paths:
           - path: /action(/|$)(.*)
             pathType: ImplementationSpecific

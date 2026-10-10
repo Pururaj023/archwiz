@@ -48,14 +48,20 @@ jobs:
 
       - name: Bump image tag
         run: |
-          sed -i "s|image: ${{ env.IMAGE }}:.*|image: ${{ env.IMAGE }}:${{ github.sha }}|" pages/strategy/k8s/deployment.yaml
+          # Replace whatever the image line currently is (placeholder, :latest or an old sha)
+          sed -i -E "s|^([[:space:]]*)image:.*|\1image: ${{ env.IMAGE }}:${{ github.sha }}|" pages/strategy/k8s/deployment.yaml
+          echo "--- image line now:"
+          grep -n "image:" pages/strategy/k8s/deployment.yaml
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add pages/strategy/k8s/deployment.yaml
-          git diff --cached --quiet && exit 0
+          if git diff --cached --quiet; then
+            echo "Manifest already has this tag, nothing to commit."
+            exit 0
+          fi
           git commit -m "deploy(strategy): ${{ github.sha }} [skip ci]"
           for i in 1 2 3 4 5; do
             git pull --rebase origin main && git push origin HEAD:main && exit 0
