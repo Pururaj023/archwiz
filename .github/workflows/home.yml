@@ -36,16 +36,29 @@ jobs:
             ${{ env.IMAGE }}:${{ github.sha }}
             ${{ env.IMAGE }}:latest
 
-  # Runs on YOUR machine (the one running minikube), because GitHub's cloud
-  # runners cannot reach a minikube cluster on localhost.
-  deploy:
+  # GitOps: write the new image tag into the manifest and commit it.
+  # Argo CD (running inside minikube) sees the commit and deploys it.
+  update-manifest:
     needs: build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy to minikube
+      - name: Bump image tag
         run: |
-          kubectl config use-context minikube
-          sed "s|IMAGE_PLACEHOLDER|${{ env.IMAGE }}:${{ github.sha }}|" pages/home/k8s/deployment.yaml | kubectl apply -f -
-          kubectl rollout status deployment/gamepicks-home --timeout=120s
+          sed -i "s|image: ${{ env.IMAGE }}:.*|image: ${{ env.IMAGE }}:${{ github.sha }}|" pages/home/k8s/deployment.yaml
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pages/home/k8s/deployment.yaml
+          git diff --cached --quiet && exit 0
+          git commit -m "deploy(home): ${{ github.sha }} [skip ci]"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep 3
+          done
+          exit 1
