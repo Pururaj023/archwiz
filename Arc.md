@@ -18,6 +18,16 @@ helm upgrade --install arc-runner-set \
   --set-string githubConfigUrl="$GITHUB_CONFIG_URL" \
   --set-string githubConfigSecret=arc-github-auth \
   --set minRunners=0 \
-  --set maxRunners=2 \
+  --set maxRunners=10 \
+  oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set \
+  --wait --timeout 5m
+
+  helm upgrade --install arc-runner-set \
+  --namespace arc-runners \
+  --set-string githubConfigUrl="$GITHUB_CONFIG_URL" \
+  --set-string githubConfigSecret=arc-github-auth \
+  --set minRunners=0 \
+  --set maxRunners=10 \
+  --set containerMode.type=dind \
   oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set \
   --wait --timeout 5m
