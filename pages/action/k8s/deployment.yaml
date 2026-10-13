@@ -17,7 +17,7 @@ spec:
       containers:
         - name: web
           # The pipeline rewrites this tag to the new commit SHA; Argo CD then syncs it.
-          image: pururajchoudhary23/gamepicks-action:4bce74fa5510a16eb00cc88ee1a00474548032a8
+          image: pururajchoudhary23/gamepicks-action:5c673b906930994acc78908b579a3e2f18475b37
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
